@@ -60,7 +60,13 @@
       value: 1,
     },
     description: 1,
-    is_quotation: 1,
+    is_quotation: {
+    	$cond: {
+      	if: { $gt: [{$size: "$jobs.quotation"}, 0] },
+      	then: true,
+      	else: false,
+    	},
+  	},
     job_origin: 1,
   },
   orders: {
