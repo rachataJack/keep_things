@@ -37,17 +37,7 @@
             job_origin: "$$job.job_origin",
             status: {
               $cond: {
-                if: {
-                  $eq: [
-                    {
-                      $arrayElemAt: [
-                        "$$job.status_history.value",
-                        -1,
-                      ],
-                    },
-                    "survey_finished",
-                  ],
-                },
+                if: { $eq: [ "$$job.status" , "survey_finished" ], },
                 then: {
                   $cond: {
                     if: "$$job.is_quotation",
@@ -55,12 +45,7 @@
                     else: "request_quotation",
                   },
                 },
-                else: {
-                  $arrayElemAt: [
-                    "$$job.status_history.value",
-                    -1,
-                  ],
-                },
+                else: "$$job.status",
               },
             },
             has_quotation: "$$job.is_quotation",
