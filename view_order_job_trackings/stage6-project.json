@@ -56,9 +56,7 @@
       sub_total: 1,
     },
     type_of_job: 1,
-    status_history: {
-      value: 1,
-    },
+    status: 1,
     description: 1,
     is_quotation: {
     	$cond: {
