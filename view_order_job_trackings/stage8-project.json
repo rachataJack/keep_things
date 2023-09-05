@@ -1,0 +1,146 @@
+{
+  id: "$data.id",
+  code: "$data.code",
+  type: "$data.type",
+  customer_firstname: "$data.customer_firstname",
+  customer_lastname: "$data.customer_lastname",
+  customer_fullname: "$data.customer_fullname",
+  customer_phone_number:
+    "$data.customer_phone_number",
+  customer_phone_number_2nd:
+    "$data.customer_phone_number_2nd",
+  created_at: "$data.created_at",
+  channel_name: "$data.store.channel",
+  store_uuid: "$data.store.store_uuid",
+  items: {
+    $cond: {
+      if: {
+        $gt: [
+          {
+            $size: "$data.jobs",
+          },
+          0,
+        ],
+      },
+      then: {
+        $map: {
+          input: "$data.jobs",
+          as: "job",
+          in: {
+            order_id: {
+              $arrayElemAt: ["$orders._id", 0],
+            },
+            job_id: "$$job._id",
+            type: "job",
+            product_type: "$$job.type_of_job",
+            product_name: "$$job.description",
+            job_origin: "$$job.job_origin",
+            status: {
+              $cond: {
+                if: {
+                  $eq: [
+                    {
+                      $arrayElemAt: [
+                        "$$job.status_history.value",
+                        -1,
+                      ],
+                    },
+                    "survey_finished",
+                  ],
+                },
+                then: {
+                  $cond: {
+                    if: "$$job.is_quotation",
+                    then: "quotation",
+                    else: "request_quotation",
+                  },
+                },
+                else: {
+                  $arrayElemAt: [
+                    "$$job.status_history.value",
+                    -1,
+                  ],
+                },
+              },
+            },
+            has_quotation: "$$job.is_quotation",
+            seller_name: {
+              $arrayElemAt: [
+                "$orders.seller.name",
+                0,
+              ],
+            },
+            seller_code: {
+              $arrayElemAt: [
+                "$orders.seller.code",
+                0,
+              ],
+            },
+            total_price: {
+              $ifNull: [
+                {
+                  $cond: {
+                    if: {
+                      $eq: [
+                        {
+                          $type:
+                            "$$job.quotation",
+                        },
+                        "array",
+                      ],
+                    },
+                    then: {
+                      $arrayElemAt: [
+                        "$$job.quotation.sub_total",
+                        0,
+                      ],
+                    },
+                    else: null,
+                  },
+                },
+                {
+                  $arrayElemAt: [
+                    "$$job.invoice.sub_total",
+                    0,
+                  ],
+                },
+              ],
+            },
+          },
+        },
+      },
+      else: {
+        $map: {
+          input: "$orders",
+          as: "order",
+          in: {
+            order_id: "$$order._id",
+            type: "order",
+            product_type: {
+              $arrayElemAt: [
+                "$$order.items.product_type",
+                0,
+              ],
+            },
+            product_name: {
+              $arrayElemAt: [
+                "$$order.items.product_name",
+                0,
+              ],
+            },
+            status: {
+              $arrayElemAt: [
+                "$$order.status_history.value",
+                -1,
+              ],
+            },
+            total_price: "$$order.total_price",
+            code: "$$order.code",
+            seller_name: "$$order.seller.name",
+            seller_code: "$$order.seller.code",
+          },
+        },
+      },
+    },
+  },
+}

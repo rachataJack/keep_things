@@ -1,0 +1,22 @@
+{
+  let: {
+    userObjId: {
+      $convert: {
+        input: "$bu_store_id",
+        to: "objectId",
+        onError: null,
+      },
+    },
+  },
+  from: "stores",
+  pipeline: [
+    {
+      $match: {
+        $expr: {
+          $eq: ["$_id", "$$userObjId"],
+        },
+      },
+    },
+  ],
+  as: "stores",
+}
