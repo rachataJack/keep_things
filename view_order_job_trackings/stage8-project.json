@@ -37,7 +37,7 @@
             job_origin: "$$job.job_origin",
             status: {
               $cond: {
-                if: { $eq: [ "$$job.status" , "survey_finished" ], },
+                if: { $eq: [ "$$job.status", "survey_finished", ], },
                 then: {
                   $cond: {
                     if: "$$job.is_quotation",
