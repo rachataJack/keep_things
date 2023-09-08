@@ -1,0 +1,11 @@
+{
+  jobs: {
+    $not: {
+      $elemMatch: {
+        status: {
+          $in: ["claim", "deleted"],
+        },
+      },
+    },
+  },
+}

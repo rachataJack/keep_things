@@ -57,18 +57,50 @@
     },
     type_of_job: 1,
     status: 1,
+    status_history: {
+      value: 1,
+    },
     description: 1,
     is_quotation: {
-    	$cond: {
-      	if: { $gt: [{$size: "$jobs.quotation"}, 0] },
-      	then: true,
-      	else: false,
-    	},
-  	},
+      $cond: {
+        if: {
+          $gt: [
+            {
+              $size: "$jobs.quotation",
+            },
+            0,
+          ],
+        },
+        then: true,
+        else: false,
+      },
+    },
+    is_contractor: {
+      $cond: {
+        if: {
+          not: {
+            $and: [
+              {
+                $ne: ["$jobs.contractor_id", ""],
+              },
+              {
+                $eq: [
+                  "$jobs.contractor_accept",
+                  true,
+                ],
+              },
+            ],
+          },
+        },
+        then: true,
+        else: false,
+      },
+    },
     job_origin: 1,
   },
   orders: {
     _id: 1,
+    status: 1,
     status_history: {
       value: 1,
     },

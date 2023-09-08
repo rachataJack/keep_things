@@ -1,0 +1,37 @@
+{
+  total_price: {
+    $sum: "$items.total_price",
+  },
+  status: {
+    $cond: {
+      if: {
+        $and: [
+          {
+            $in: [
+              "$items.status",
+              [
+                "request_quotation",
+                "created",
+                "quotation_management",
+              ],
+            ],
+          },
+          {
+            $eq: ["$items.is_quotation", true],
+          },
+        ],
+      },
+      then: "exists_quotation",
+      else: "$status",
+    },
+  },
+  items: {
+    $filter: {
+      input: "$items",
+      as: "item",
+      cond: {
+        $not: "$$item.job_origin",
+      },
+    },
+  },
+}

@@ -13,7 +13,11 @@
     {
       $match: {
         $expr: {
-          $eq: ["$_id", "$$userObjId"],
+          $and: [
+            {
+              $eq: ["$_id", "$$userObjId"],
+            },
+          ],
         },
       },
     },
