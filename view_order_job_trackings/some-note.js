@@ -36,36 +36,97 @@ for (let i = 0; i < jobs.length; i++) {
     }
   }
 
-  bro this is what my docs look like.
+  hello! 
   
-  jobDocs = [
-    {
-      job_id: 'x1',
-      job_type: 'I',
-      job_status: 'request_quotation',
-    },
-    {
-      job_id: 'x2',
-      job_type: 'S',
-      job_status: 'request_quotation',
-    },
-    {
-      job_id: 'x1',
-      job_type: 'S',
-      job_status: 'request_quotation',
-    }
-  ]
-
-  i wannt to assign status 'exists_quotation' to the job that have condition below.
+  i want to ask questions about mongodb aggregate
   
+  this is input collection
+  
+  input:
+  {
+    "data": [
+      {
+        "code": "Q2309-000226",
+        "items": [
+          {
+            "productType": "S",
+            "status": "request_quotation",
+            "hasQuotation": false
+          }
+        ],
+      },
+      {
+        "code": "Q2309-000227",
+        "items": [
+          {
+            "productType": "I",
+            "status": "request_quotation",
+            "hasQuotation": false
+          }
+        ],
+      },
+      {
+        "code": "Q2309-000226",
+        "items": [
+          {
+            "productType": "I",
+            "status": "request_quotation",
+            "hasQuotation": true
+          }
+        ],
+      },
+]
+  
+  i want to assign status 'exists_quotation' to the items that have condition below.
+  and keep other doc that not in the condition stay still
+  
+  condition
   1. job status is 'request_quotation' or 'created' or 'quotation_management'
   2. job_type is 'S'
-  3. if looking another document and see the same job_id 
-  4. that doc from 3. have job_type = 'I'
+  3. if looking another document and see the same code 
+  4. and that doc from 3. have job_type = 'I'
 
-  how can i check that
-  can it done in one stage or should i use more
+  my expected output:
+  {
+    "data": [
+      {
+        "code": "Q2309-000226",
+        "items": [
+          {
+            "productType": "S",
+            "status": "exists_quotation",
+            "hasQuotation": false
+          }
+        ],
+      },
+      {
+        "code": "Q2309-000227",
+        "items": [
+          {
+            "productType": "I",
+            "status": "request_quotation",
+            "hasQuotation": false
+          }
+        ],
+      },
+      {
+        "code": "Q2309-000226",
+        "items": [
+          {
+            "productType": "I",
+            "status": "exists_quotation",
+            "hasQuotation": true
+          }
+        ],
+      },
+]
 
+พี่ปลาครับ
+เรื่อง status exists_quotation
+ที่เงื่อนไขคือต้องเป็น job type 'S'
+ที่มี code เหมือนกับ job type 'I'
+อะพี่ ตอนนี้ข้อมูลใน env dev เรามี job แบบนั้นมั้ยนะพี่
+  
 
   new issue 1 อัพเดทวิธีเช็ค status exist exists_quotation
   (P'Pla create งาน สำรวจ ต่อ ติดตั้ง ที่ควรจะมี status นี้ไว้แล้ว job.code = Q2309-000172)
@@ -88,14 +149,18 @@ for (let i = 0; i < jobs.length; i++) {
 "installation_started"     "เริ่มการติดตั้ง"
 "installation_requested"   "นัดติดตั้ง"
 "assigned"                 "ได้รับมอบหมาย"
+
 "installation_confirmed"   "ยืนยันการติดตั้ง"
+
 "created"                  "สร้างใหม่"
 - "paid_to_contractor"     "จ่ายเงินให้ช่างแล้ว"
 "installation_finished"    "สิ้นสุดการติดตั้ง"
 "survey_finished"          "สิ้นสุดการสำรวจ"
 "paid"                     "ชำระเงิน"
 "quotation_management"     "อยู่ระหว่างเสนอราคา"
+
 - "exists_quotation"       "สร้างใบเสนอราคาแล้ว"
+
 "survey_started"           "เริ่มสำรวจ"
 "installation_accepted"    "ลูกค้ายอมรับ"
 "installation_rejected"    "ลูกค้าปฏิเสธ"

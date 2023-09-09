@@ -1,0 +1,139 @@
+{
+  _id: 0,
+  code: {
+    $cond: {
+      if: {
+        $gt: [
+          {
+            $size: "$jobs",
+          },
+          0,
+        ],
+      },
+      then: {
+        $arrayElemAt: ["$jobs.job_code", 0],
+      },
+      else: "$cart_order_no",
+    },
+  },
+  id: {
+    $cond: {
+      if: {
+        $gt: [
+          {
+            $size: "$jobs",
+          },
+          0,
+        ],
+      },
+      then: {
+        $arrayElemAt: ["$jobs._id", 0],
+      },
+      else: "$_id",
+    },
+  },
+  type: {
+    $cond: {
+      if: {
+        $gt: [
+          {
+            $size: "$jobs",
+          },
+          0,
+        ],
+      },
+      then: "job",
+      else: "cart_order",
+    },
+  },
+  cart_order_no: "$cart_order_no",
+  jobs: {
+    _id: 1,
+    invoice: {
+      sub_total: 1,
+    },
+    quotation: {
+      sub_total: 1,
+    },
+    type_of_job: 1,
+    status: 1,
+    status_history: {
+      value: 1,
+    },
+    description: 1,
+    is_quotation: {
+      $cond: {
+        if: {
+          $gt: [
+            {
+              $size: "$jobs.quotation",
+            },
+            0,
+          ],
+        },
+        then: true,
+        else: false,
+      },
+    },
+    is_contractor_accept: {
+      $allElementsTrue: {
+        $map: {
+          input: "$jobs.contractor_accept",
+          as: "ca",
+          in: {
+            $and: [
+              {
+                $ne: ["$$ca", null],
+              },
+              {
+                $ne: ["$$ca.contractor_id", ""],
+              },
+            ],
+          },
+        },
+      },
+    },
+    job_origin: 1,
+  },
+  orders: {
+    _id: 1,
+    status: 1,
+    status_history: {
+      value: 1,
+    },
+    total_price: 1,
+    seller: 1,
+    items: {
+      product_name: 1,
+      product_type: 1,
+    },
+  },
+  customer_firstname: "$customer.firstname",
+  customer_lastname: "$customer.lastname",
+  customer_fullname: {
+    $concat: [
+      "$customer.firstname",
+      " ",
+      "$customer.lastname",
+    ],
+  },
+  customer_phone_number: "$customer.mobile",
+  customer_phone_number_2nd: "$customer.mobile2",
+  channel: 1,
+  store: {
+    $arrayElemAt: [
+      {
+        $map: {
+          input: "$stores",
+          as: "store",
+          in: {
+            store_uuid: "$$store.store_uuid",
+            channel: "$$store.channel",
+          },
+        },
+      },
+      0,
+    ],
+  },
+  created_at: "$create_at",
+}

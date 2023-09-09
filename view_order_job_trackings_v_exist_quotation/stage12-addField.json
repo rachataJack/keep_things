@@ -1,0 +1,14 @@
+{
+  total_price: {
+    $sum: "$items.total_price",
+  },
+  items: {
+    $filter: {
+      input: "$items",
+      as: "item",
+      cond: {
+        $not: "$$item.job_origin",
+      },
+    },
+  },
+}

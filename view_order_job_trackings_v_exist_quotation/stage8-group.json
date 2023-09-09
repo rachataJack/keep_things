@@ -1,0 +1,9 @@
+{
+  _id: "$code",
+  orders: {
+    $push: "$orders",
+  },
+  data: {
+    $first: "$$ROOT",
+  },
+}

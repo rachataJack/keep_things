@@ -1,0 +1,11 @@
+{
+  jobs: {
+    $not: {
+      $elemMatch: {
+        is_active: {
+          $eq: false,
+        },
+      },
+    },
+  },
+}

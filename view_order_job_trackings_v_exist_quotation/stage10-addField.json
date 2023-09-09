@@ -1,0 +1,96 @@
+{
+  isExistQuotation: {
+    $let: {
+      vars: {
+        sCount: {
+          $reduce: {
+            input: "$items",
+            initialValue: 0,
+            in: {
+              $cond: [
+                {
+                  $and: [
+                    {
+                      $eq: [
+                        "$$this.product_type",
+                        "S",
+                      ],
+                    },
+                    {
+                      $in: [
+                        "$$this.status",
+                        [
+                          "request_quotation",
+                          "created",
+                          "quotation_management",
+                        ],
+                      ],
+                    },
+                  ],
+                },
+                {
+                  $add: ["$$value", 1],
+                },
+                "$$value",
+              ],
+            },
+          },
+        },
+        iCount: {
+          $reduce: {
+            input: "$items",
+            initialValue: 0,
+            in: {
+              $cond: [
+                {
+                  $and: [
+                    {
+                      $eq: [
+                        "$$this.product_type",
+                        "I",
+                      ],
+                    },
+                    {
+                      $eq: [
+                        "$$this.has_quotation",
+                        true,
+                      ],
+                    },
+                  ],
+                },
+                {
+                  $add: ["$$value", 1],
+                },
+                "$$value",
+              ],
+            },
+          },
+        },
+      },
+      in: {
+        sCount: "$$sCount",
+        iCount: "$$iCount",
+        hasValidCounts: {
+          $and: [
+            {
+              $gt: ["$$sCount", 0],
+            },
+            {
+              $gt: ["$$iCount", 0],
+            },
+            {
+              $eq: [
+                {
+                  $add: ["$$sCount", "$$iCount"],
+                },
+                {
+                  $size: "$items",
+                },
+              ],
+            },
+          ],
+        },
+      },
+    },
+  },
+}
