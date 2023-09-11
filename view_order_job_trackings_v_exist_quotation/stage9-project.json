@@ -33,7 +33,33 @@
             job_id: "$$job._id",
             type: "job",
             product_type: "$$job.type_of_job",
-            product_name: "$$job.description",
+            product_name: {
+              $cond: {
+                if: {
+                  $and: [
+                    {
+                      $eq: [
+                        "$$job.type_of_job",
+                        "I",
+                      ],
+                    },
+                    {
+                      $eq: [
+                        "$$job.is_quotation",
+                        true,
+                      ],
+                    },
+                  ],
+                },
+                then: {
+                  $arrayElemAt: [
+                    "$$job.quotation.installment_name",
+                    0,
+                  ],
+                },
+                else: "$$job.description",
+              },
+            },
             job_origin: "$$job.job_origin",
             status: {
               $switch: {
@@ -143,7 +169,7 @@
                     },
                     then: {
                       $arrayElemAt: [
-                        "$$job.quotation.sub_total",
+                        "$$job.quotation.grand_total",
                         0,
                       ],
                     },

@@ -53,6 +53,8 @@
       sub_total: 1,
     },
     quotation: {
+      grand_total: 1,
+      installment_name: 1,
       sub_total: 1,
     },
     type_of_job: 1,
