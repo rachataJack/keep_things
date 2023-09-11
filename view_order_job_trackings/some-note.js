@@ -36,98 +36,6 @@ for (let i = 0; i < jobs.length; i++) {
     }
   }
 
-  hello! 
-  
-  i want to ask questions about mongodb aggregate
-  
-  this is input collection
-  
-  input:
-  {
-    "data": [
-      {
-        "code": "Q2309-000226",
-        "items": [
-          {
-            "productType": "S",
-            "status": "request_quotation",
-            "hasQuotation": false
-          }
-        ],
-      },
-      {
-        "code": "Q2309-000227",
-        "items": [
-          {
-            "productType": "I",
-            "status": "request_quotation",
-            "hasQuotation": false
-          }
-        ],
-      },
-      {
-        "code": "Q2309-000226",
-        "items": [
-          {
-            "productType": "I",
-            "status": "request_quotation",
-            "hasQuotation": true
-          }
-        ],
-      },
-]
-  
-  i want to assign status 'exists_quotation' to the items that have condition below.
-  and keep other doc that not in the condition stay still
-  
-  condition
-  1. job status is 'request_quotation' or 'created' or 'quotation_management'
-  2. job_type is 'S'
-  3. if looking another document and see the same code 
-  4. and that doc from 3. have job_type = 'I'
-
-  my expected output:
-  {
-    "data": [
-      {
-        "code": "Q2309-000226",
-        "items": [
-          {
-            "productType": "S",
-            "status": "exists_quotation",
-            "hasQuotation": false
-          }
-        ],
-      },
-      {
-        "code": "Q2309-000227",
-        "items": [
-          {
-            "productType": "I",
-            "status": "request_quotation",
-            "hasQuotation": false
-          }
-        ],
-      },
-      {
-        "code": "Q2309-000226",
-        "items": [
-          {
-            "productType": "I",
-            "status": "exists_quotation",
-            "hasQuotation": true
-          }
-        ],
-      },
-]
-
-พี่ปลาครับ
-เรื่อง status exists_quotation
-ที่เงื่อนไขคือต้องเป็น job type 'S'
-ที่มี code เหมือนกับ job type 'I'
-อะพี่ ตอนนี้ข้อมูลใน env dev เรามี job แบบนั้นมั้ยนะพี่
-  
-
   new issue 1 อัพเดทวิธีเช็ค status exist exists_quotation
   (P'Pla create งาน สำรวจ ต่อ ติดตั้ง ที่ควรจะมี status นี้ไว้แล้ว job.code = Q2309-000172)
   เงื่อนไขของ status exists_quotation
@@ -138,7 +46,6 @@ for (let i = 0; i < jobs.length; i++) {
       3.1 กรณี job type I มีมากกว่า 1 - เช็ค job type I ที่มี job_origin ว่ามีใบเสนอราคา quotation > 0 * length(quotation) > 0 (ใบ quotation จะมีเฉพาะในงานติดตั้งเท่านั้น)
       3.2 กรณีมี type I job เดียวกันเช็คจอปนั้นได้เลยว่า quotation>0 รึป่าว
   
-
   new issue 2 *อันนี้เป็นอีกการ์ด
   ถ้ามีงานติดตั้ง 'I' มากกว่า 1 งาน
   ตัวหน้าบ้านจะแสดงแค่ row เดียว แต่เราต้องเอา ราคาทั้งหมด ของใบเสนอราคาทุกใบ มารวมกัน (พอดีมันจะมีเคสแบบ ราคาแพงๆ200kเงี้ย เค้าก็แยกบิลอะ)
