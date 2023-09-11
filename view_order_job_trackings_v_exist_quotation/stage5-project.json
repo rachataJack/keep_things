@@ -1,0 +1,27 @@
+{
+  customer: 1,
+  expected_date: 1,
+  items: 1,
+  request_tax_invoice: 1,
+  remark: 1,
+  channel: 1,
+  request_payment: 1,
+  request_store_payment: 1,
+  bu_store_id: 1,
+  store_id: 1,
+  cart_order_no: 1,
+  contractor_id: 1,
+  create_at: 1,
+  update_at: 1,
+  payment_status: 1,
+  orders: 1,
+  jobs: {
+    $filter: {
+      input: "$jobs",
+      as: "job",
+      cond: {
+        $ne: ["$$job.is_active", false],
+      },
+    },
+  },
+}
