@@ -1,15 +1,4 @@
 {
-    $expr: {
-      $and: [
-        { $eq: ["$data.code", "Q2309-000166"] }
-      ]
-    }
-  }
-
-
-
-6.5
-{
   $expr: {
     $and: [
       { $eq: ["$cart_order_no", "CO2309-000174"] },
@@ -17,20 +6,3 @@
     ]
   }
 }
-
-
-cart_order_no           data.code
-install conf    CO2309-000178           Q2309-000169
-cont no view    CO2309-000174           Q2309-000166
-
-issue1 CO2309-000256 Q2309-000249
-ราคางวดใช้ 
-ใช้ quo . grand_total
-
-ชืองวดใช้ 
-quo. installment name
-
-issue2 Q2309-000248 รอพี่ปลาไปคุยกับพี่ฟาง
-
-issue3 
-CO2309-000248 ราคาไม่แสดง
