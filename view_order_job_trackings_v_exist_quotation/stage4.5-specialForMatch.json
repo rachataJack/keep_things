@@ -2,16 +2,13 @@ stage 4.5
 {
   $expr: {
     $or: [
-      { $eq: ["$cart_order_no", "CO2309-000256"] },
+      { $eq: ["$cart_order_no", "CO2309-000248"] },
     ]
   }
 }
 
-Q2303-000001
 
-stage 8.5
 {
-  $expr: {
-    $gt: [{ $size: "$data.jobs" }, 2]
-  }
+  "jobs.job_code": { $in: ['Q2309-000318'] } 
 }
+

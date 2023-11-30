@@ -1,6 +1,0 @@
-{
-  from: "jobs",
-  localField: "orders.code",
-  foreignField: "sale_order_code",
-  as: "jobs",
-}

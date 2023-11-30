@@ -1,6 +1,0 @@
-{
-  from: "qchang_orders",
-  localField: "cart_order_no",
-  foreignField: "cart_order_no",
-  as: "orders",
-}

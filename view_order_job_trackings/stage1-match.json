@@ -1,5 +1,0 @@
-{
-  cart_order_no: {
-    $exists: true,
-  },
-}

@@ -1,0 +1,27 @@
+{
+  "mappings": {
+    "dynamic": false,
+    "fields": {
+      "name": {
+        "analyzer": "myNGram",
+        "type": "string"
+      },
+      "code": {
+        "analyzer": "myNGram",
+        "type": "string"
+      }
+    }
+  },
+  "analyzers": [
+    {
+      "name": "myNGram",
+      "charFilters": [],
+      "tokenFilters": [],
+      "tokenizer": {
+        "maxGram": 6,
+        "minGram": 2,
+        "type": "nGram"
+      }
+    }
+  ]
+}
