@@ -1,109 +1,50 @@
 [
-  // looking for similar field
+  // looking for similar word
   {
     $search: {
       index: "businessCategory",
       text: {
         path: ["code", "name"],
         query: "clean",
+        score: {
+          boost: {
+            value: 1,
+          },
+        },
       },
     },
   },
-  // remove delete, not-activate docs
+  {
+    $project: {
+      _id: 1,
+      uuid: 1,
+      code: 1,
+      name: 1,
+      description: 1,
+      created_date: 1,
+      created_by: 1,
+      updated_date: 1,
+      updated_by: 1,
+      is_active: 1,
+      is_deleted: 1,
+      UpdatedBy: 1,
+      UpdatedDate: 1,
+      type: 1,
+      master_uuid: 1,
+      score: {
+        $meta: "searchScore",
+      },
+    },
+  },
+
+  // remove delete, non-activate docs
   {
     $match: {
       is_active: true,
       is_deleted: false,
     },
   },
-  // why should i doing rank?
-  // bcuz when the 1st stage (searching stage) found the sub-category
-  // but not found the main-category (which it's correct: Sub-category names don't need to be the same as their main category)
-  //
-  // so i try to use this solution
-  // i use the field 'master_uuid' of sub-cat to looking-up whole collection
-  //
-  // -->> the issue is here
-  // When obtaining the main category, how can I determine the correct position for it within another main categories?
-  // so i rank all doc i have found from 2 stage before
-  // and then after i compound main-cate and sub-cate into correct object i will sort it by 'rank'
-  //
-  
-  // prepare rank - step 1: convert input docs to single object with field 'documents'
-  {
-    $group: {
-      _id: null,
-      documents: {
-        $push: "$$ROOT",
-      },
-    },
-  },
-  // prepare rank - step 2: so i can create array field 'rank'
-  {
-    $addFields: {
-      rank: {
-        $map: {
-          input: {
-            $range: [
-              0,
-              {
-                $size: "$documents",
-              },
-            ],
-          },
-          as: "index",
-          in: {
-            $add: [0, "$$index"],
-          },
-        },
-      },
-    },
-  },
-  // prepare rank - step 3: inject field 'rank' to each doc in 'documents'
-  {
-    $addFields: {
-      documents: {
-        $map: {
-          input: {
-            $zip: {
-              inputs: ["$documents", "$rank"],
-            },
-          },
-          as: "pair",
-          in: {
-            $mergeObjects: [
-              {
-                $arrayElemAt: ["$$pair", 0],
-              },
-              {
-                rank: {
-                  $arrayElemAt: ["$$pair", 1],
-                },
-              },
-            ],
-          },
-        },
-      },
-    },
-  },
-  {
-    $unwind: "$documents",
-  },
-  {
-    $project: {
-      _id: 0,
-      documents: 1,
-    },
-  },
-  // prepare rank - DONE
 
-  // Get the main-cate that stage search not found
-  // Get the main-cate - Step 1: Identify sub-categories where the master_uuid does not match any other main-category uuid.
-  {
-    $replaceRoot: {
-      newRoot: "$documents",
-    },
-  },
   {
     $facet: {
       business_category: [
@@ -122,11 +63,11 @@
       ],
     },
   },
-  // Get the main-cate - Step 2: prepare arrays for inject to main cate
+  
+  // prepare uuid, score of sub-cate that doesnt have their master by stage search (anyway they master must be in the collection!)
   {
     $addFields: {
-      // prepare diff uuid for seeking in whole collection
-      differented_uuid: {
+      uuid_sub_categories_without_master: {
         $filter: {
           input:
             "$sub_business_category.master_uuid",
@@ -141,8 +82,7 @@
           },
         },
       },
-      // prepare the sub-cate rank for inject to main-cate after found it
-      differented_rank: {
+      score_sub_categories_without_master: {
         $map: {
           input: {
             $filter: {
@@ -159,31 +99,33 @@
             },
           },
           as: "matchedCategory",
-          in: "$$matchedCategory.rank",
+          in: "$$matchedCategory.score",
         },
       },
     },
   },
-  
-  // Get the main-cate - Step 3: lookup whole collection
+
+  // looking for masters~~
   {
     $lookup: {
       from: "way3-mixInOneColl",
-      localField: "differented_uuid",
+      localField:
+        "uuid_sub_categories_without_master",
       foreignField: "uuid",
-      as: "matched_docs",
+      as: "matched_master_categories",
     },
   },
-  // Get the main-cate - Step 4: inject rank into main-cate
+
+  // inject score to masters
   {
     $addFields: {
-      matched_docs: {
+      matched_master_categories: {
         $map: {
           input: {
             $zip: {
               inputs: [
-                "$matched_docs",
-                "$differented_rank",
+                "$matched_master_categories",
+                "$score_sub_categories_without_master",
               ],
             },
           },
@@ -194,7 +136,7 @@
                 $arrayElemAt: ["$$pair", 0],
               },
               {
-                rank: {
+                score: {
                   $arrayElemAt: ["$$pair", 1],
                 },
               },
@@ -204,21 +146,56 @@
       },
     },
   },
-  // Get the main-cate - DONE
 
-  // Start building the expected result before send to API
-  // append that main-cate to main array -> business_category
-  // how to say it in go: business_category = append(business_category, matching_docs)
+  // may be masters have another sub-cate that didnt found by stage search. lets looking for them
   {
-    $addFields: {
+    $lookup: {
+      from: "way3-mixInOneColl",
+      localField:
+        "uuid_sub_categories_without_master",
+      foreignField: "master_uuid",
+      as: "matched_sub_categories",
+    },
+  },
+
+  // append the 'come late category' into their type
+  {
+    $project: {
       business_category: {
         $concatArrays: [
           "$business_category",
-          "$matched_docs",
+          "$matched_master_categories",
+        ],
+      },
+      sub_business_category: {
+        $setUnion: [
+          "$sub_business_category",
+          {
+            $map: {
+              input: "$matched_sub_categories",
+              as: "matched_sub_categories",
+              in: {
+                $cond: {
+                  if: {
+                    $not: {
+                      $in: [
+                        "$$matched_sub_categories.uuid",
+                        "$sub_business_category.uuid",
+                      ],
+                    },
+                  },
+                  then: "$$matched_sub_categories",
+                  else: null,
+                },
+              },
+            },
+          },
         ],
       },
     },
   },
+
+  // structuring mongo documents suit to API
   {
     $unwind: "$business_category",
   },
@@ -250,13 +227,15 @@
       newRoot: "$business_category",
     },
   },
-  // the rank that prepared before is using here~
+  
+  // the 'late come category' may cause ordering incorrect. sort score for sure
   {
     $sort: {
-      rank: 1,
+      score: -1,
     },
   },
-  // pagination
+
+  // doing pagination
   {
     $group: {
       _id: null,
