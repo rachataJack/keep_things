@@ -1,0 +1,196 @@
+[{
+  "_id": {
+    "$oid": "65656eaa077d58689a0af610"
+  },
+  "uuid": "mockUUID-ACClean",
+  "code": "MAC",
+  "name": "MOCK AC Cleaning",
+  "description": "mock งานทำความสะอาดเครื่องปรับอากาศ",
+  "created_date": {
+    "$date": "2023-11-24T03:39:42.750Z"
+  },
+  "created_by": 66,
+  "updated_date": {
+    "$date": "2023-11-24T03:39:42.750Z"
+  },
+  "updated_by": 66,
+  "is_active": true,
+  "is_deleted": true,
+  "sub_business_categories": [
+    {
+      "code": "MAC-1",
+      "name": "ACA name1",
+      "description": "คำอธิบายล้างแอร์ 1",
+      "is_active": true,
+      "is_deleted": false
+    },
+    {
+      "code": "MAC-2",
+      "name": "ACA name2",
+      "description": "คำอธิบายล้างแอร์ 2",
+      "is_active": true,
+      "is_deleted": true
+    },
+    {
+      "code": "MAC-3",
+      "name": "ACA name3",
+      "description": "คำอธิบายล้างแอร์ 3",
+      "is_active": true,
+      "is_deleted": false
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "656571c1077d58689a0af615"
+  },
+  "uuid": "mockUUID-AC-Supreme",
+  "code": "MAD",
+  "name": "MOCK AC Supreme wink wink",
+  "description": "mock งานทำความสะอาดเครื่องปรับอากาศ wink wink",
+  "created_date": {
+    "$date": "2023-11-24T03:39:42.750Z"
+  },
+  "created_by": 66,
+  "updated_date": {
+    "$date": "2023-11-24T03:39:42.750Z"
+  },
+  "updated_by": 66,
+  "is_active": true,
+  "is_deleted": false,
+  "sub_business_categories": [
+    {
+      "code": "MAD-1",
+      "name": "MAD1 Supreme Clean 1",
+      "description": "คำอธิบายล้างแอร์ 1",
+      "is_active": true,
+      "is_deleted": false
+    },
+    {
+      "code": "MAD-2",
+      "name": "MAD2 Supreme Clean 2",
+      "description": "คำอธิบายล้างแอร์ 2",
+      "is_active": true,
+      "is_deleted": false
+    },
+    {
+      "code": "MAD-3",
+      "name": "MAD3 name3",
+      "description": "คำอธิบายล้างแอร์ 3 Clean Supreme",
+      "is_active": true,
+      "is_deleted": false
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "65657373077d58689a0af617"
+  },
+  "uuid": "mockUUID-must-not-found",
+  "code": "MNF",
+  "name": "mustNotFound",
+  "description": "mustNotFound desc",
+  "created_date": {
+    "$date": "2023-11-24T03:39:42.750Z"
+  },
+  "created_by": 66,
+  "updated_date": {
+    "$date": "2023-11-24T03:39:42.750Z"
+  },
+  "updated_by": 66,
+  "is_active": true,
+  "is_deleted": false,
+  "sub_business_categories": [
+    {
+      "code": "MNF-1",
+      "name": "CLEAN",
+      "description": "คำอธิบายล้างแอร์ 1",
+      "is_active": true,
+      "is_deleted": true
+    },
+    {
+      "code": "MAD-2",
+      "name": "MNF name2",
+      "description": "Clean",
+      "is_active": false,
+      "is_deleted": false
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6565b961077d58689a0af652"
+  },
+  "uuid": "mockUUID-GDClean-E",
+  "code": "MGE",
+  "name": "MOCK Garden Cleaning E",
+  "description": "mock งานทำความสะอาดสวน E",
+  "created_date": {
+    "$date": "2023-11-24T03:39:42.750Z"
+  },
+  "created_by": 66,
+  "updated_date": {
+    "$date": "2023-11-24T03:39:42.750Z"
+  },
+  "updated_by": 66,
+  "is_active": true,
+  "is_deleted": false,
+  "sub_business_categories": [
+    {
+      "code": "MGE-1",
+      "name": "Sub Garden Clean E 1",
+      "description": "คำอธิบายหมวดหมู่ย่อยทำความสะอาดสวน 1",
+      "is_active": true,
+      "is_deleted": true
+    },
+    {
+      "code": "MGE-1",
+      "name": "Sub Category Garden Clean EE 2222",
+      "description": "คำอธิบายหมวดหมู่ย่อยทำความสะอาดสวน 2",
+      "is_active": true,
+      "is_deleted": false
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "6565f64cc9b7f91016ebddee"
+  },
+  "uuid": "mockUUID-GDClean",
+  "code": "MGD",
+  "name": "MOCK Garden Cleaning",
+  "description": "mock งานทำความสะอาดสวน",
+  "created_date": {
+    "$date": "2023-11-24T03:39:42.750Z"
+  },
+  "created_by": 66,
+  "updated_date": {
+    "$date": "2023-11-24T03:39:42.750Z"
+  },
+  "updated_by": 66,
+  "is_active": true,
+  "is_deleted": false,
+  "sub_business_categories": [
+    {
+      "code": "MGD-1",
+      "name": "Sub Garden Clean 1",
+      "description": "คำอธิบายหมวดหมู่ย่อยทำความสะอาดสวน 1",
+      "is_active": true,
+      "is_deleted": false
+    },
+    {
+      "code": "MGD-1",
+      "name": "Sub Category Garden Clean 2",
+      "description": "คำอธิบายหมวดหมู่ย่อยทำความสะอาดสวน 2",
+      "is_active": true,
+      "is_deleted": false
+    },
+    {
+      "code": "MGD-1",
+      "name": "sub cate name 3",
+      "description": "คำอธิบายหมวดหมู่ย่อยทำความสะอาดสวน 2",
+      "is_active": true,
+      "is_deleted": false
+    }
+  ]
+}]

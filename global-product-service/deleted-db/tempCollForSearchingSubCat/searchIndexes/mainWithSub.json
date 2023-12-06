@@ -1,0 +1,52 @@
+{
+  "mappings": {
+    "dynamic": true,
+    "fields": {
+      "name": {
+        "analyzer": "myNGram",
+        "type": "string"
+      },
+      "code": {
+        "analyzer": "myNGram",
+        "type": "string"
+      },
+      "is_deleted": {
+        "type": "boolean"
+      },
+      "is_active": {
+        "type": "boolean"
+      },
+      "sub_business_categories": {
+        "type": "embeddedDocuments",
+        "fields": {
+          "name": {
+            "analyzer": "myNGram",
+            "type": "string"
+          },
+          "code": {
+            "analyzer": "myNGram",
+            "type": "string"
+          },
+          "is_deleted": {
+            "type": "boolean"
+          },
+          "is_active": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  },
+  "analyzers": [
+    {
+      "name": "myNGram",
+      "charFilters": [],
+      "tokenFilters": [],
+      "tokenizer": {
+        "maxGram": 6,
+        "minGram": 2,
+        "type": "nGram"
+      }
+    }
+  ]
+}
